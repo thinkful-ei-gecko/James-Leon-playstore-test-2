@@ -44,5 +44,27 @@ describe('app component', () => {
         .expect('Content-Type', /html/)
         .expect(400, 'Sort must of one of rating or app')
     });
+
+    ['Action', 'Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'].forEach(type => {
+      it(`returns apps sorted by genre ${type}`, () => {
+        return supertest(app)
+          .get('/apps')
+          .query({genres: type})
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .then(res => {
+            expect(res.body).to.be.an('array')
+            let testMethod = res.body.every(app => app.Genres.includes(type))
+            expect(testMethod).to.be.true
+            // let i=0, filtered=true;
+            // while(filtered && i < res.body.length - 1){
+            //   if(!res.body[i]['Genres'].includes(type)){
+            //     filtered=false;
+            //   }
+            //   i++
+            // }
+          })
+      })
+    })
   });
 });
