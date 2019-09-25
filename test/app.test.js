@@ -66,5 +66,12 @@ describe('app component', () => {
           })
       })
     })
+    it('returns if genre is invalid', () => {
+      return supertest(app)
+        .get('/apps')
+        .query({genres: 'sdfav'})
+        .expect('Content-Type', /html/)
+        .expect(400, 'Genre does not exist')
+    });
   });
 });
